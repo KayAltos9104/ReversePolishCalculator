@@ -7,28 +7,16 @@ using System.Threading.Tasks;
 namespace CalculationModule
 {
 
-    class ReversePolishNotation
+    public static class ReversePolishNotation
     {
-        Dictionary<string, byte> signsDict = new Dictionary<string, byte>();
-
-        public ReversePolishNotation()//Знаки в двух местах дублируются. Плохо. Надо как-то объединить с MathOperate
-        {
-            signsDict.Add("+", 1);
-            signsDict.Add("-", 1);
-            signsDict.Add("*", 2);
-            signsDict.Add("/", 2);
-            signsDict.Add("^", 3);
-        }
-
-        public bool RevPolNotTryParse(string input, out string postFixNotation)
+        public static bool RevPolNotTryParse(string input, out string postFixNotation)
         {
             List<string> parsedInput = new List<string>(input.Split(" "));
             Stack<string> stack = new Stack<string>();
             postFixNotation = "";
             foreach (var element in parsedInput)
-            {
-                double newNumber;
-                if (double.TryParse(element, out newNumber))
+            {                
+                if (double.TryParse(element, out double newNumber))
                 {
                     postFixNotation += newNumber + " ";
                 }
@@ -36,9 +24,9 @@ namespace CalculationModule
                 {
                     stack.Push(element);
                 }
-                else if (IsMathOperator(element))
+                else if (MathParser.IsMathOperator(element))
                 {
-                    while (stack.Count != 0 &&IsMathOperator(stack.Peek()) && signsDict[element] <= signsDict[stack.Peek()])
+                    while (stack.Count != 0 && MathParser.IsMathOperator(stack.Peek()) && MathParser.signsDict[element] <= MathParser.signsDict[stack.Peek()])
                     {
                         postFixNotation += stack.Pop() + " ";
                     }
@@ -61,100 +49,64 @@ namespace CalculationModule
             }
             while (stack.Count != 0)
                 postFixNotation += stack.Pop() + " ";
+
             postFixNotation = postFixNotation.Trim();
             return true;
         }
 
-    
 
-        public double Calculate(string input)
+
+        public static bool Calculate(string input, out double answer, out string log)
         {
             string[] parsedInput = input.Split(" ");
+            log = "Вычисление прошло успешно";
             List<string> expression = new List<string>(parsedInput);
             Stack<double> stack = new Stack<double>();
-            try
+
+            foreach (var element in expression)
             {
-                foreach (var element in expression)
+                if (MathParser.IsMathOperator(element))
                 {
-                    if (IsMathOperator(element))
+                    if (stack.Count >= 2)//TODO: Сделать обработку для действий с одним операндом
                     {
-                        if (stack.Count >= 2)//TODO: Сделать обработку для действий с одним операндом
+                        double number1 = stack.Pop();
+                        double number2 = stack.Pop();                       
+                        if (MathParser.MathOperate(element, number1, number2, out double result))
                         {
-                            double number1 = stack.Pop();
-                            double number2 = stack.Pop();
-                            double result;
-                            if (MathOperate(element, number1, number2, out result))
-                                stack.Push(result);
-                            else
-                                throw new Exception($"Неверная запись в выражении - {element}");
+                            stack.Push(result);
                         }
                         else
                         {
-                            throw new Exception($"Не хватает операндов для действия {element}");
+                            log = $"Неверная запись в выражении - {element}";
+                            answer = 0;
+                            return false;
                         }
                     }
                     else
+                    {                        
+                        log = $"Не хватает операндов для действия {element}";
+                        answer = 0;
+                        return false;
+                    }
+                }
+                else
+                {                   
+                    if (double.TryParse(element, out double newNumber))
                     {
-                        double newNumber;
-                        if (double.TryParse(element, out newNumber))
-                        {
-                            stack.Push(newNumber);
-                        }
-                        else
-                        {
-                            throw new Exception($"В выражении присутствует не число и не оператор - {element}");
-                        }
+                        stack.Push(newNumber);
+                    }
+                    else
+                    {                        
+                        log = $"В выражении присутствует не число и не оператор - {element}";
+                        answer = 0;
+                        return false;
                     }
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Ошибка исходного выражения: {e.Message}");
-            }
 
-            return stack.Pop();
+            answer = stack.Pop();
+            return true;
         }
-        private bool IsMathOperator(string symbol)
-        {
-            foreach (var sign in signsDict)
-                if (symbol == sign.Key) return true;
-            return false;
-        }
-        private bool MathOperate(string mathOperator, double number1, double number2, out double result)
-        {
-            switch (mathOperator)
-            {
-                case "+":
-                    {
-                        result = number1 + number2;
-                        return true;
-                    }
-                case "-":
-                    {
-                        result = number1 - number2;
-                        return true;
-                    }
-                case "*":
-                    {
-                        result = number1 * number2;
-                        return true;
-                    }
-                case "/":
-                    {
-                        result = number2 / number1;
-                        return true;
-                    }
-                case "^":
-                    {
-                        result = Math.Pow(number2, number1);
-                        return true;
-                    }
-                default:
-                    {
-                        result = 0;
-                        return false;
-                    }
-            }
-        }
+       
     }
 }
