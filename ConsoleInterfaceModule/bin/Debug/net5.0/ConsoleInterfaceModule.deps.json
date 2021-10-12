@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "ConsoleInterfaceModule/1.0.0": {
+        "dependencies": {
+          "CalculationModule": "1.0.0"
+        },
+        "runtime": {
+          "ConsoleInterfaceModule.dll": {}
+        }
+      },
+      "CalculationModule/1.0.0": {
+        "runtime": {
+          "CalculationModule.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ConsoleInterfaceModule/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CalculationModule/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

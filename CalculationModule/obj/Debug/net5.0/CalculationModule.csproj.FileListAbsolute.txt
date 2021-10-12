@@ -30,10 +30,7 @@ E:\Projects\Repos\RPN\CalculationModule\CalculationModule\obj\Debug\net5.0\Calcu
 E:\Projects\Repos\RPN\CalculationModule\CalculationModule\obj\Debug\net5.0\ref\CalculationModule.dll
 E:\Projects\Repos\RPN\CalculationModule\CalculationModule\obj\Debug\net5.0\CalculationModule.pdb
 E:\Projects\Repos\RPN\CalculationModule\CalculationModule\obj\Debug\net5.0\CalculationModule.genruntimeconfig.cache
-E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.exe
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.deps.json
-E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.runtimeconfig.json
-E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.runtimeconfig.dev.json
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.dll
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\ref\CalculationModule.dll
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\bin\Debug\net5.0\CalculationModule.pdb
@@ -45,4 +42,3 @@ E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModul
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\obj\Debug\net5.0\CalculationModule.dll
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\obj\Debug\net5.0\ref\CalculationModule.dll
 E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\obj\Debug\net5.0\CalculationModule.pdb
-E:\Projects\Repos\RPN\CalculationModule\ReversePolishCalculator\CalculationModule\obj\Debug\net5.0\CalculationModule.genruntimeconfig.cache

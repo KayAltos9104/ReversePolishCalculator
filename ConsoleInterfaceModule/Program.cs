@@ -1,6 +1,7 @@
 ﻿using System;
+using CalculationModule;
 
-namespace CalculationModule
+namespace ConsoleInterfaceModule
 {
     class Program
     {
