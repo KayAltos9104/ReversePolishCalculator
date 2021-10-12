@@ -9,12 +9,34 @@ namespace CalculationModule
 
     public static class ReversePolishNotation
     {
-        public static bool RevPolNotTryParse(string input, out string postFixNotation)
+        public static bool TryParse(string input, out string postFixNotation)
         {
-            List<string> parsedInput = new List<string>(input.Split(" "));
-            Stack<string> stack = new Stack<string>();
+            input = input.Replace(" ", "");
+            List<string> splitInput = new();
+            Queue<string> buffer = new ();
+            for (int i = 0; i< input.Length;i++)
+            {
+                if (double.TryParse(input[i].ToString(), out _)&&i!= input.Length-1)
+                {
+                    buffer.Enqueue(input[i].ToString());
+                }
+                else
+                {
+                    string number = "";
+                    while (buffer.Count !=0)
+                    {
+                        number += buffer.Dequeue();
+                    }
+                    if (number != "")
+                        splitInput.Add(number);
+
+                    splitInput.Add(input[i].ToString());
+                }
+            }
+            
+            Stack<string> stack = new ();
             postFixNotation = "";
-            foreach (var element in parsedInput)
+            foreach (var element in splitInput)
             {                
                 if (double.TryParse(element, out double newNumber))
                 {
@@ -53,15 +75,12 @@ namespace CalculationModule
             postFixNotation = postFixNotation.Trim();
             return true;
         }
-
-
-
         public static bool Calculate(string input, out double answer, out string log)
         {
-            string[] parsedInput = input.Split(" ");
+            string[] splitInput = input.Split(" ");
             log = "Вычисление прошло успешно";
-            List<string> expression = new List<string>(parsedInput);
-            Stack<double> stack = new Stack<double>();
+            List<string> expression = new (splitInput);
+            Stack<double> stack = new ();
 
             foreach (var element in expression)
             {
@@ -97,7 +116,7 @@ namespace CalculationModule
                     }
                     else
                     {                        
-                        log = $"В выражении присутствует не число и не оператор - {element}";
+                        log = $"В выражении присутствует не число и не оператор";
                         answer = 0;
                         return false;
                     }
