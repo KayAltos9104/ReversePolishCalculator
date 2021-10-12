@@ -6,20 +6,67 @@ using System.Threading.Tasks;
 
 namespace CalculationModule
 {
-   
+
     class ReversePolishNotation
     {
-        List<string> signsList = new List<string>();
+        Dictionary<string, byte> signsDict = new Dictionary<string, byte>();
 
-        public ReversePolishNotation()//Знаки в двух местах дублируются. Плохо. Надо как-то объединить с mathOperate
+        public ReversePolishNotation()//Знаки в двух местах дублируются. Плохо. Надо как-то объединить с MathOperate
         {
-            signsList.Add("+");
-            signsList.Add("-");
-            signsList.Add("*");
-            signsList.Add("/");
-            signsList.Add("^");
+            signsDict.Add("+", 1);
+            signsDict.Add("-", 1);
+            signsDict.Add("*", 2);
+            signsDict.Add("/", 2);
+            signsDict.Add("^", 3);
         }
-        public double Calculate (string input)
+
+        public bool RevPolNotTryParse(string input, out string revPolNotExpr)
+        {
+            List<string> parsedInput = new List<string>(input.Split(" "));
+            Stack<string> stack = new Stack<string>();
+            revPolNotExpr = "";
+            foreach (var element in parsedInput)
+            {
+                double newNumber;
+                if (double.TryParse(element, out newNumber))
+                {
+                    revPolNotExpr += newNumber + " ";
+                }
+                else if (element == "(")
+                {
+                    stack.Push(element);
+                }
+                else if (IsMathOperator(element))
+                {
+                    while (stack.Count != 0 &&IsMathOperator(stack.Peek()) && signsDict[element] <= signsDict[stack.Peek()])
+                    {
+                        revPolNotExpr += stack.Pop() + " ";
+                    }
+
+                    stack.Push(element);
+                }
+                else if (element == ")")
+                {
+                    while (stack.Peek() != "(")
+                    {
+                        if (stack.Count == 0)
+                            return false;
+                        else
+                            revPolNotExpr += stack.Pop() + " ";
+                    }
+                    stack.Pop();//Выталкиваем открывающую скобку
+                }
+                else
+                    return false;
+            }
+            while (stack.Count != 0)
+                revPolNotExpr += stack.Pop() + " ";
+            revPolNotExpr = revPolNotExpr.Trim();
+            return true;
+        }
+
+
+        public double Calculate(string input)
         {
             string[] parsedInput = input.Split(" ");
             List<string> expression = new List<string>(parsedInput);
@@ -30,7 +77,7 @@ namespace CalculationModule
                 {
                     if (IsMathOperator(element))
                     {
-                        if (stack.Count>=2)//TODO: Сделать обработку для действий с одним операндом
+                        if (stack.Count >= 2)//TODO: Сделать обработку для действий с одним операндом
                         {
                             double number1 = stack.Pop();
                             double number2 = stack.Pop();
@@ -43,12 +90,12 @@ namespace CalculationModule
                         else
                         {
                             throw new Exception($"Не хватает операндов для действия {element}");
-                        }    
+                        }
                     }
                     else
                     {
                         double newNumber;
-                        if (double.TryParse(element,out newNumber))
+                        if (double.TryParse(element, out newNumber))
                         {
                             stack.Push(newNumber);
                         }
@@ -66,13 +113,13 @@ namespace CalculationModule
 
             return stack.Pop();
         }
-        private bool IsMathOperator (string symbol)
-        {            
-            foreach (var sign in signsList)
-                if (symbol == sign) return true;
+        private bool IsMathOperator(string symbol)
+        {
+            foreach (var sign in signsDict)
+                if (symbol == sign.Key) return true;
             return false;
         }
-        private bool MathOperate (string mathOperator, double number1, double number2, out double result)
+        private bool MathOperate(string mathOperator, double number1, double number2, out double result)
         {
             switch (mathOperator)
             {
@@ -83,23 +130,23 @@ namespace CalculationModule
                     }
                 case "-":
                     {
-                        result = number1 + number2;
+                        result = number1 - number2;
                         return true;
                     }
                 case "*":
                     {
-                        result = number1 + number2;
+                        result = number1 * number2;
                         return true;
                     }
                 case "/":
                     {
-                        result = number1 + number2;
+                        result = number1 / number2;
                         return true;
                     }
                 case "^":
                     {
                         result = Math.Pow(number1, number2);
-                        return true; 
+                        return true;
                     }
                 default:
                     {

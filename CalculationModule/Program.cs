@@ -7,7 +7,10 @@ namespace CalculationModule
         static void Main()
         {
             ReversePolishNotation rpn = new ReversePolishNotation();
-            Console.WriteLine(rpn.Calculate("1 2 3 2 + ^ +"));
+            string expression;
+            rpn.RevPolNotTryParse("2 * 2 + ( 4 * 4 )", out expression);
+            //Console.WriteLine(rpn.Calculate("1 2 3 2 + ^ +"));
+            Console.WriteLine(rpn.Calculate(expression));
         }
     }
 }
