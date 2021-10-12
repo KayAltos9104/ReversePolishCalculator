@@ -1,1 +1,3 @@
 /.vs/*
+/CalculationModule/obj/*
+/CalculationModule/bin/*
