@@ -8,7 +8,7 @@ namespace CalculationModule
 {
     static class MathParser
     {
-        public static readonly Dictionary<string, byte> signsDict = new Dictionary<string, byte>()
+        public static readonly Dictionary<string, byte> signsDict = new ()
         {
             { "+", 1 },
             { "-", 1 },
@@ -19,9 +19,7 @@ namespace CalculationModule
 
         public static bool IsMathOperator(string symbol)
         {
-            foreach (var sign in signsDict)
-                if (symbol == sign.Key) return true;
-            return false;
+            return signsDict.ContainsKey(symbol);            
         }
         public static bool MathOperate(string mathOperator, double number1, double number2, out double result)
         {
