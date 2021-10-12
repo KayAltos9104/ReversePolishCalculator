@@ -20,17 +20,17 @@ namespace CalculationModule
             signsDict.Add("^", 3);
         }
 
-        public bool RevPolNotTryParse(string input, out string revPolNotExpr)
+        public bool RevPolNotTryParse(string input, out string postFixNotation)
         {
             List<string> parsedInput = new List<string>(input.Split(" "));
             Stack<string> stack = new Stack<string>();
-            revPolNotExpr = "";
+            postFixNotation = "";
             foreach (var element in parsedInput)
             {
                 double newNumber;
                 if (double.TryParse(element, out newNumber))
                 {
-                    revPolNotExpr += newNumber + " ";
+                    postFixNotation += newNumber + " ";
                 }
                 else if (element == "(")
                 {
@@ -40,7 +40,7 @@ namespace CalculationModule
                 {
                     while (stack.Count != 0 &&IsMathOperator(stack.Peek()) && signsDict[element] <= signsDict[stack.Peek()])
                     {
-                        revPolNotExpr += stack.Pop() + " ";
+                        postFixNotation += stack.Pop() + " ";
                     }
 
                     stack.Push(element);
@@ -52,7 +52,7 @@ namespace CalculationModule
                         if (stack.Count == 0)
                             return false;
                         else
-                            revPolNotExpr += stack.Pop() + " ";
+                            postFixNotation += stack.Pop() + " ";
                     }
                     stack.Pop();//Выталкиваем открывающую скобку
                 }
@@ -60,11 +60,12 @@ namespace CalculationModule
                     return false;
             }
             while (stack.Count != 0)
-                revPolNotExpr += stack.Pop() + " ";
-            revPolNotExpr = revPolNotExpr.Trim();
+                postFixNotation += stack.Pop() + " ";
+            postFixNotation = postFixNotation.Trim();
             return true;
         }
 
+    
 
         public double Calculate(string input)
         {
