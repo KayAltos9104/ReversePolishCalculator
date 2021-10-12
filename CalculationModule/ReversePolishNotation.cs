@@ -141,12 +141,12 @@ namespace CalculationModule
                     }
                 case "/":
                     {
-                        result = number1 / number2;
+                        result = number2 / number1;
                         return true;
                     }
                 case "^":
                     {
-                        result = Math.Pow(number1, number2);
+                        result = Math.Pow(number2, number1);
                         return true;
                     }
                 default:
