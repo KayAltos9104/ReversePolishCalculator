@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CalculationModule;
 
 namespace ConsoleInterfaceModule
 {
     class MainMenu
     {
         int cursor;
-        
+
+        Reader.ReadMode currentReadMode;
 
         public delegate void ConsoleHandler (object sender, ConsoleMenuEventHandler e);
         public event ConsoleHandler Push;
@@ -26,19 +28,31 @@ namespace ConsoleInterfaceModule
             menuItemsNames.Add(0, "Посчитать выражение");
             menuItemsDict.Add(0, Calculate);
 
-            menuItemsNames.Add(1, "Выбрать режим считывания");
-            menuItemsDict.Add(1, SetReadMode);
+            menuItemsNames.Add(1, "Переключить режим считывания");
+            menuItemsDict.Add(1, SwitchReadMode);
 
             menuItemsNames.Add(2, "Выйти из программы");
             menuItemsDict.Add(2, Exit);
+
+            Push += menuItemsDict[cursor];
+            currentReadMode = Reader.ReadMode.console;
         }
+        //TODO: Разбить на модули
         public void LaunchMainCycle ()
         {
             ConsoleKeyInfo key;
            
             do
             {
+                Console.WriteLine("Используйте стрелки, чтобы переключаться между пунктами, пробел - чтобы выбрать");
+                foreach (var item in menuItemsNames)
+                {
+                    Console.WriteLine("> " + item.Value);
+                }
+                Console.WriteLine();
+                Console.WriteLine($"Текущий режим ввода выражения: {Reader.GetModeName(currentReadMode)}");
                 Console.WriteLine("Выбрано: " + menuItemsNames[cursor]);
+
                 key = Console.ReadKey();
                 Console.Clear();
                 switch (key.Key)
@@ -57,7 +71,7 @@ namespace ConsoleInterfaceModule
                         {
                             Push.Invoke(this, new ConsoleMenuEventHandler());
                             break;
-                        }
+                        }                    
                 }
             } while (key.Key!=ConsoleKey.Escape);        
         }
@@ -84,12 +98,52 @@ namespace ConsoleInterfaceModule
 
         private void Calculate (object sender, ConsoleMenuEventHandler e)
         {
-            Console.WriteLine("Заглушка!");            
+            switch (currentReadMode)
+            {
+                case Reader.ReadMode.console:
+                    {
+                        if (Reader.Read(out string input))
+                        {
+                            if (ReversePolishNotation.TryParse(input, out string postFixExpression))
+                            {
+                                if (ReversePolishNotation.Calculate(postFixExpression, out double result, out string log))
+                                {
+                                    //Console.WriteLine($"Исходное выражение: {input}");
+                                    Console.WriteLine($"Постфиксная запись: {postFixExpression}");
+                                    Console.WriteLine($"Ответ: {result}");
+                                    Console.WriteLine(log);
+                                    Console.WriteLine();
+                                }
+                                else
+                                {
+                                    Console.WriteLine(log);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Не удалось разбить строку на составляющие");//Убрать потом отсюда врайтлайны
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Введена пустая строка");//Убрать потом отсюда врайтлайны
+                        }
+                        break;
+                    }
+                case Reader.ReadMode.textFile:
+                    {
+                        Console.WriteLine("Пока не работает");
+                        break;
+                    }
+            }
         }
 
-        private void SetReadMode(object sender, ConsoleMenuEventHandler e)
+        private void SwitchReadMode(object sender, ConsoleMenuEventHandler e)
         {
-            Console.WriteLine("Заглушка!");
+            if (currentReadMode == Reader.ReadMode.console)
+                currentReadMode = Reader.ReadMode.textFile;
+            else
+                currentReadMode = Reader.ReadMode.console;
         }
 
         private void Exit(object sender, ConsoleMenuEventHandler e)

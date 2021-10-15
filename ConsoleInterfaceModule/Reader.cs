@@ -11,6 +11,7 @@ namespace ConsoleInterfaceModule
     {
         public static bool Read (out string expression)
         {
+            Console.Write("Введите выражение для расчета: ");
             string input = Console.ReadLine();
             expression = input;
             if (input.Length == 0)
@@ -44,6 +45,31 @@ namespace ConsoleInterfaceModule
                 expression = "";
                 return false;
             }
+        }
+
+        public static string GetModeName (ReadMode mode)
+        {
+            switch (mode)
+            {
+                case ReadMode.console:
+                    {
+                        return "Консоль";
+                    }
+                case ReadMode.textFile:
+                    {
+                        return "Текстовый файл";
+                    }
+                default:
+                    {
+                        return "Неизвестный режим";
+                    }
+            }
+        }
+
+        public enum ReadMode: byte
+        {
+            console = 0,
+            textFile = 1
         }
     }
 }
