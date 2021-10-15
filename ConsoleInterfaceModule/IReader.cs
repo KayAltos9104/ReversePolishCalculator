@@ -8,6 +8,6 @@ namespace ConsoleInterfaceModule
 {
     interface IReader
     {
-        
+        bool ReadExpression(out string expression);
     }
 }

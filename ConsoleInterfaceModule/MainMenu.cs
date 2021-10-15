@@ -9,6 +9,7 @@ namespace ConsoleInterfaceModule
     class MainMenu
     {
         int cursor;
+        
 
         public delegate void ConsoleHandler (object sender, ConsoleMenuEventHandler e);
         public event ConsoleHandler Push;
