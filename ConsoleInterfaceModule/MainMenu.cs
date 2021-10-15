@@ -26,7 +26,7 @@ namespace ConsoleInterfaceModule
             menuItemsDict.Add(0, Calculate);
 
             menuItemsNames.Add(1, "Выбрать режим считывания");
-            menuItemsDict.Add(1, Calculate);
+            menuItemsDict.Add(1, SetReadMode);
 
             menuItemsNames.Add(2, "Выйти из программы");
             menuItemsDict.Add(2, Exit);
